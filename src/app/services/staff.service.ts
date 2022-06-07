@@ -63,7 +63,7 @@ export class StaffService {
   countTeachers() {
     let obs = new Observable<number>((observer) => {
       this.http
-        .get<any>('/api/count/exb_subject/teacher', { observe: 'response' })
+        .get<any>('/api/count/exb_teacher/teacher', { observe: 'response' })
         .subscribe({
           next: (data) => {
             observer.next(data.body!['COUNT(teacher)']);

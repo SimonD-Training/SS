@@ -56,7 +56,7 @@ export class SummaryComponent implements OnInit {
             else this.Schedule = [];
           });
         } else {
-          this.warningMsg = 'Schedules Overlap!';
+          this.warningMsg = 'Scheduling Error!';
           if (this.warnlock) clearInterval(this.warnlock);
           this.warnlock = setInterval(() => {
             this.warningMsg = null;

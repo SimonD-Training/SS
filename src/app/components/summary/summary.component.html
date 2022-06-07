@@ -1,6 +1,6 @@
 <div
   *ngIf="warningMsg"
-  class="position-absolute bottom-0 end-0 m-2 p-2 text-light bg-warning"
+  class="position-fixed bottom-0 end-0 m-2 p-2 text-light bg-warning"
 >
   {{ warningMsg }}
 </div>
@@ -43,7 +43,7 @@
   <div class="container">
     <h2 class="main-heading">Class Schedule</h2>
     <form #form="ngForm">
-      <table class="w-100">
+      <table class="w-100 mx-5">
         <tr>
           <th>Class</th>
           <th>Date</th>
@@ -64,10 +64,12 @@
         </tr>
         <tr style="background: #0f08;">
           <td><input type="text" name="classroom" required ngModel></td>
-          <td><input type="date" name="date" required ngModel></td>
+          <td><input type="text" name="day" required ngModel></td>
           <td><input type="time" name="time" required ngModel></td>
           <td><input type="text" name="subject" required ngModel></td>
-          <td><input type="text" name="teacher" required ngModel></td>
+          <td><select type="text" name="teacher" required ngModel>
+            <option *ngFor="let item of Teachers | filter:'subject':form.controls['subject'].value" [value]="item.teacher">{{item.teacher}}</option>
+          </select></td>
           <td class="btn border-0" (click)="form.valid && schedule(form)">CREATE</td>
         </tr>
       </table>

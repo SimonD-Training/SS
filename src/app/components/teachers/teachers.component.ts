@@ -51,6 +51,7 @@ export class TeachersComponent implements OnInit {
     let { teacher, subject, room } = form.controls;
     this.staffS
       .hire({
+        id: 0,
         teacher: teacher.value,
         subject: subject.value,
         class: room.value,

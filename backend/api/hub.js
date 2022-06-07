@@ -16,7 +16,7 @@ router.use(
     secret: process.env.SECRET,
     saveUninitialized: true,
     resave: false,
-    cookie: { maxAge: 120000 },
+    cookie: { maxAge: 5 * 60000 },
   })
 );
 
@@ -58,18 +58,10 @@ router.post("/staff", (req, res) => {
   //req.body.class
   //req.body.subject
   database.query(
-    `INSERT INTO exb_subject (teacher, subject) VALUES ('${req.body.teacher}', '${req.body.subject}')`,
+    `INSERT INTO exb_teacher (teacher, subject, class) VALUES ('${req.body.teacher}', '${req.body.subject}', '${req.body.class}')`,
     (err) => {
       if (err) res.sendStatus(409);
-      else {
-        database.query(
-          `INSERT INTO exb_class (teacher, class) VALUES ('${req.body.teacher}', '${req.body.class}')`,
-          (err) => {
-            if (err) res.sendStatus(409);
-            else res.status(200).send(true);
-          }
-        );
-      }
+      else res.status(200).send(true);
     }
   );
 });
@@ -80,29 +72,21 @@ router.post("/schedule", (req, res) => {
   //req.body.teacher
   //req.body.subject
   database.query(
-    `SELECT subject FROM exb_subject WHERE teacher = '${req.body.teacher}' AND subject = '${req.body.subject}'`,
+    `SELECT class FROM exb_teacher WHERE teacher = '${req.body.teacher}' AND class = '${req.body.class}' AND subject = '${req.body.subject}';`,
     (err, rows) => {
       if (err) throw err;
       else {
-        database.query(
-          `SELECT class FROM exb_class WHERE teacher = '${req.body.teacher}' AND class = '${req.body.class}'`,
-          (err, rows) => {
-            if (err) throw err;
-            else {
-              if (rows.length == 1) {
-                database.query(
-                  `INSERT INTO exb_session (time, day, teacher) VALUES ('${req.body.time}', '${req.body.day}', '${req.body.teacher}');`,
-                  (err) => {
-                    if (err) res.sendStatus(409);
-                    else res.status(200).send(true);
-                  }
-                );
-              } else {
-                res.sendStatus(409);
-              }
+        if (rows.length == 1) {
+          database.query(
+            `INSERT INTO exb_session (time, day, teacher) VALUES ('${req.body.time}', '${req.body.day}', '${req.body.teacher}');`,
+            (err) => {
+              if (err) res.sendStatus(409);
+              else res.status(200).send(true);
             }
-          }
-        );
+          );
+        } else {
+          res.sendStatus(409);
+        }
       }
     }
   );
@@ -110,7 +94,7 @@ router.post("/schedule", (req, res) => {
 
 router.get("/api/schedule", (req, res) => {
   database.query(
-    `SELECT class, day, time, teacher, subject from exb_subject NATURAL JOIN exb_class NATURAL JOIN exb_session;`,
+    `SELECT class, day, time, teacher, subject from exb_session NATURAL JOIN exb_teacher;`,
     (err, rows) => {
       if (err) throw err;
       else if (rows.length < 1) res.sendStatus(404);
@@ -119,11 +103,14 @@ router.get("/api/schedule", (req, res) => {
   );
 });
 router.get("/api/staff", (req, res) => {
-  database.query("SELECT * FROM exb_class NATURAL JOIN exb_subject;", (err, rows) => {
-    if (err) throw err;
-    else if (rows.length < 1) res.sendStatus(404);
-    else res.status(200).send(rows);
-  });
+  database.query(
+    "SELECT * FROM exb_teacher;",
+    (err, rows) => {
+      if (err) throw err;
+      else if (rows.length < 1) res.sendStatus(404);
+      else res.status(200).send(rows);
+    }
+  );
 });
 router.get("/api/max/:table/:field", (req, res) => {
   database.query(
@@ -185,40 +172,33 @@ router.put("/schedule", (req, res) => {
   //req.body.teacher
   //req.body.subject
   database.query(
-    `SELECT subject FROM exb_subject WHERE teacher = '${req.body.teacher}' AND subject = '${req.body.subject}'`,
+    `SELECT * FROM exb_teacher WHERE teacher = '${req.body.teacher}' AND class = '${req.body.class}' AND subject = '${req.body.subject}'`,
     (err, rows) => {
       if (err) throw err;
       else {
-        database.query(
-          `SELECT class FROM exb_class WHERE teacher = '${req.body.teacher}' AND class = '${req.body.class}'`,
-          (err, rows) => {
-            if (err) throw err;
-            else {
-              if (rows.length == 1) {
-                database.query(
-                  "UPDATE exb_session SET teacher = ? WHERE day = ? AND time = ?",
-                  [req.body.teacher, req.body.day, req.body.time],
-                  (err) => {
-                    if (err) throw err;
-                    else res.status(200).send(true);
-                  }
-                );
-              } else {
-                res.sendStatus(409);
-              }
+        if (rows.length == 1) {
+          database.query(
+            "UPDATE exb_session SET teacher = ? WHERE day = ? AND time = ?",
+            [req.body.teacher, req.body.day, req.body.time],
+            (err) => {
+              if (err) throw err;
+              else res.status(200).send(true);
             }
-          }
-        );
+          );
+        } else {
+          res.sendStatus(409);
+        }
       }
     }
   );
 });
 router.put("/staff", (req, res) => {
-  //req.body.teacher
+  //req.body.id
+  //req.body.class
   //req.body.subject
   database.query(
-    "UPDATE exb_subject SET subject = ? WHERE teacher = ?",
-    [req.body.subject, req.body.teacher],
+    "UPDATE exb_teacher SET subject = ?, class = ? WHERE id = ?",
+    [req.body.subject, req.body.class, req.body.id],
     (err) => {
       if (err) throw err;
       else res.status(200).send(true);

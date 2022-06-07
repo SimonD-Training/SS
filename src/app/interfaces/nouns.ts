@@ -12,6 +12,7 @@ export interface scheduleItem {
 }
 
 export interface staffItem {
+    id: number,
     teacher: string,
     subject: string,
     class: string

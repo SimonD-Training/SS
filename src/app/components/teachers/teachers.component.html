@@ -1,3 +1,9 @@
+<div
+  *ngIf="warningMsg"
+  class="position-fixed bottom-0 end-0 m-2 p-2 text-light bg-warning"
+>
+  {{ warningMsg }}
+</div>
 <div class="top_container sub_pages">
   <!-- header section strats -->
   <header class="header_section">
@@ -36,27 +42,25 @@
 <section class="teacher_section layout_padding-bottom">
   <div class="container">
     <h2 class="main-heading">Our Teachers</h2>
-    <p class="text-center">
-      Quick statistics.
-    </p>
-    <table class="w-100">
-        <tr>
-            <td colspan="2">Teachers:</td>
-            <td colspan="2">{{Stats.teachers}}</td>
-        </tr>        
-        <tr>
-            <td>Earliest Class:</td>
-            <td>{{Stats.early}}</td>
-            <td>Latest Class:</td>
-            <td>{{Stats.late}}</td>
-        </tr>        
-    </table> <br> <br>
+    <p class="text-center">Quick statistics.</p>
+    <table class="w-100 mx-5">
+      <tr>
+        <td colspan="2">Teachers:</td>
+        <td colspan="2">{{ Stats.teachers }}</td>
+      </tr>
+      <tr>
+        <td>Earliest Class:</td>
+        <td>{{ Stats.early }}</td>
+        <td>Latest Class:</td>
+        <td>{{ Stats.late }}</td>
+      </tr>
+    </table>
+    <br />
+    <br />
 
-    <p class="text-center">
-      Add or edit teachers and the subject they teach.
-    </p>
+    <p class="text-center">Add or edit teachers and the subject they teach.</p>
     <form #form="ngForm">
-      <table class="w-100">
+      <table class="w-100 mx-5">
         <tr>
           <th>Teacher</th>
           <th>Subject</th>
@@ -65,15 +69,29 @@
         </tr>
         <tr *ngFor="let teacher of Teachers ?? []; let i = index">
           <td>{{ teacher.teacher }}</td>
-          <td><input type="text" [name]="'subject'+i" [(ngModel)]="Teachers[i].subject"></td>
-          <td><input type="text" [name]="'class'+i" [(ngModel)]="Teachers[i].class"></td>
+          <td>
+            <input
+              type="text"
+              [name]="'subject' + i"
+              [(ngModel)]="Teachers[i].subject"
+            />
+          </td>
+          <td>
+            <input
+              type="text"
+              [name]="'class' + i"
+              [(ngModel)]="Teachers[i].class"
+            />
+          </td>
           <td class="btn border-0" (click)="edit(Teachers[i])">EDIT</td>
         </tr>
-        <tr style="background: #0f08;">
+        <tr style="background: #0f08">
           <td><input type="text" name="teacher" required ngModel /></td>
           <td><input type="text" name="subject" required ngModel /></td>
           <td><input type="text" name="room" required ngModel /></td>
-          <td class="btn border-0" (click)="form.valid && hire(form)">CREATE</td>
+          <td class="btn border-0" (click)="form.valid && hire(form)">
+            CREATE
+          </td>
         </tr>
       </table>
     </form>
