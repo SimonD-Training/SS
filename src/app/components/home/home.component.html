@@ -1,0 +1,110 @@
+<div
+  *ngIf="warningMsg"
+  class="position-absolute bottom-0 end-0 m-2 p-2 text-light bg-warning"
+>
+  {{ warningMsg }}
+</div>
+<div class="top_container">
+  <!-- header section strats -->
+  <header class="header_section">
+    <div class="container">
+      <nav
+        class="navbar navbar-expand-lg custom_nav-container d-flex justify-content-between"
+      >
+        <a class="navbar-brand" href="">
+          <img src="../../../assets/logo.png" alt="" />
+          <span> Friendship Primary </span>
+        </a>
+        <form #form="ngForm">
+          <input class="mx-2" type="email" name="email" placeholder="Email" email required ngModel />
+          <input class="mx-2" type="password" name="password" placeholder="Password" minlength="8" required ngModel />
+          <input
+            class="btn btn-sm btn-primary"
+            type="submit"
+            value="Log In"
+            (click)="form.valid && login(form)"
+          />
+        </form>
+      </nav>
+    </div>
+  </header>
+  <section class="hero_section">
+    <div class="hero-container container">
+      <div class="hero_detail-box">
+        <h3>
+          Welcome to <br />
+          Your future!
+        </h3>
+        <h1>Elementary</h1>
+        <p>Every child can learn, every child must learn!</p>
+        <div class="hero_btn-continer">
+          <a href="" class="call_to-btn btn_white-border">
+            <span> Contact </span>
+            <img src="../../../assets/right-arrow.png" alt="" />
+          </a>
+        </div>
+      </div>
+      <div class="hero_img-container">
+        <div>
+          <img src="../../../assets/hero.png" alt="" class="img-fluid" />
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<!-- end header section -->
+
+<!-- about section -->
+<section class="about_section layout_padding">
+  <div class="container">
+    <h2 class="main-heading">About Our School</h2>
+    <p class="text-center">
+      Founded in 1890 by bobby Schmurda, our elementary school has always
+      strived to bring out our students' best. In return we have garnered
+      hundreds of achievements through our gifted students.
+    </p>
+    <div class="about_img-box">
+      <img src="../../../assets/kids.jpg" alt="" class="img-fluid w-100" />
+    </div>
+  </div>
+</section>
+
+<!-- about section -->
+
+<!-- client section -->
+<section class="client_section layout_padding">
+  <div class="container">
+    <h2 class="main-heading">Our Students Feedback</h2>
+    <p class="text-center">Take listen to the inspiring words of our Alumni.</p>
+    <div class="layout_padding2">
+      <div class="client_container d-flex flex-column">
+        <div class="client_detail d-flex align-items-center">
+          <div class="client_img-box">
+            <img src="../../../assets/student.png" alt="" />
+          </div>
+          <div class="client_detail-box">
+            <h4>Veniam Quis</h4>
+            <span> (exercitation) </span>
+          </div>
+        </div>
+        <div class="client_text mt-4">
+          <p>
+            "Being here were the best years of my childhood, I'll be happy if I
+            can return here shortly once i've finished teacher's college."
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- client section -->
+
+<!-- footer section -->
+<section class="container-fluid footer_section">
+  <p>Copyright &copy; 2019 All Rights Reserved By Simon Maxwell</p>
+</section>
+<!-- footer section -->
+
+<script type="text/javascript" src="../../js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../../js/bootstrap.js"></script>

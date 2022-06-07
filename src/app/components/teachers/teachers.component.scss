@@ -1,0 +1,15 @@
+table {
+    border-spacing: 0;
+}
+table td, table th {
+    border: 1px solid #0008;
+}
+input {
+    background: none;
+    border: none;
+    height: 100%;
+    width: 100%;
+}
+input:focus {
+    outline: none;
+}
